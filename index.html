@@ -3,50 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CSV to HTML Table</title>
 </head>
 <body>
-    <h1>Table 1</h1>
-    <table id ="table1">
+
+    <h2>Table 1</h2>
+    <table id="table1">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Age</th>
+                
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>lion</td>
+                <td>leopard</td>
                 <td>2</td>
-              
+                
+            </tr>
+            <tr>
+                <td>lion</td>
+                <td>3</td>
+               
             </tr>
             <tr>
                 <td>tiger</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>leo</td>
                 <td>2</td>
+               
             </tr>
         </tbody>
     </table>
-<!-- button that export csv file and store in local storage -->
-    <button onClick="tableToCSV()">Export To CSV</button>
-    
-    <h1>Table 2 (Fetched from Local Storage)</h1>
-    <table id="table 2">
+
+    <button onclick="exportTableToCSV()">Export to CSV and Store</button>
+
+    <h2>Table 2 (Fetched from Local Storage)</h2>
+    <table id="table2">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Fetched data will be inserted here -->
+        </tbody>
     </table>
-    <!--button that shows the exported data-->
-    <button onClick = "fetchCSVFromStorage()">Fetch CSV from Storage</button>
+
+    <button onclick="fetchCSVFromStorage()">Fetch CSV from Storage</button>
+
+    <script>
+        function exportTableToCSV() {
+            let table = document.getElementById("table1");
+            let rows = table.querySelectorAll("tr");
+
+            let csvContent = "";
+
+            rows.forEach((row) => {
+                let cols = row.querySelectorAll("th, td");
+                let rowData = [];
+
+                cols.forEach((col) => {
+                    rowData.push(col.innerText);
+                });
+
+                csvContent += rowData.join(",") + "\n";
+            });
+
+            // Store the CSV content in local storage
+            localStorage.setItem("tableCSV", csvContent);
+
+            
+        }
+
+        function fetchCSVFromStorage() {
+            let csvContent = localStorage.getItem("tableCSV");
+
+            if (!csvContent) {
+                alert("No CSV data found in local storage!");
+                return;
+            }
+
+            let rows = csvContent.trim().split("\n");
+            let table2Body = document.getElementById("table2").querySelector("tbody");
+
+            // Clear any existing rows in Table 2
+            table2Body.innerHTML = "";
+
+            rows.forEach((row) => {
+                let cols = row.split(",");
+                let tr = document.createElement("tr");
+
+                cols.forEach((col) => {
+                    let td = document.createElement("td");
+                    td.innerText = col.trim();
+                    tr.appendChild(td);
+                });
+
+                table2Body.appendChild(tr);
+            });
+
+            
+        }
+    </script>
+
 </body>
-<script href="/index.js"></script>
 </html>

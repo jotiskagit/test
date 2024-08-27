@@ -15,7 +15,7 @@ function exportTableToCSV() {
         csvContent += rowData.join(",") + "\n";
     });
 
-   
+    // Store the CSV content in local storage
     localStorage.setItem("tableCSV", csvContent);
 
     alert("Table 1 data has been exported to CSV and stored in local storage!");
